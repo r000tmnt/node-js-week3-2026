@@ -104,9 +104,24 @@ router.get('/:id', (req, res) => {
 // - 輸出：201 + 新會員物件（id 自動配），或 400 + { error: '缺 name 或 level' }（驗證失敗）
 // - 提示：validateBody(req.body) 驗證；通過後用 spread 將 req.body 的欄位與 nextId 自動遞增的 id 合為新物件，push 進 members
 // - 範例：POST /members body { name: '阿文', level: 'VIP' } → 201 { id: 5, name: '阿文', level: 'VIP' }
-/* 作答區
-router.METHOD('PATH', (req, res) => { ... });
-*/
+/* 作答區  */
+router.post('/', (req, res) => { 
+    if(validateBody(req.body)){
+        const { name, level } = req.body
+        members.push({
+            id: nextId,
+            name,
+            level
+        })
+
+        nextId += 1
+
+        res.status(201).json(members[members.length - 1])
+    }else{
+        res.status(400).json({ error: '缺 name 或 level' })
+    }
+ });
+
 
 // ───────────────────────────────────────────────────────────
 // TODO 任務四：PUT /:id 和 DELETE /:id
