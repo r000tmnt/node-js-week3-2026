@@ -134,10 +134,12 @@ router.post('/', (req, res) => {
 // - 範例：PUT /members/1 body { level: 'normal' } → 200 { id: 1, name: '小華', level: 'normal' }（name 被保留）
 /* 作答區 */
 router.put('/:id', (req, res) => { 
-    if(validateBody(req.body).valid){
+    if(req.body.level || req.body.name){
         const { id } = req.params
         const target = members.findIndex(member => member.id === Number(id))
         
+        console.log('target', target)
+
         if(target >= 0){
         
             members[target] = {
@@ -162,17 +164,7 @@ router.put('/:id', (req, res) => {
 /* 作答區 */
 router.delete('/:id', (req, res) => { 
     if(validateBody(req.body).valid){
-        const { id } = req.params
-        const target = members.findIndex(member => member.id === Number(id))
-        
-        if(target >= 0){
-        
-            members.splice(target, 1)
-
-            res.status(204).end()
-        }else{
-            res.status(404).json({ error: '會員不存在' })
-        }        
+    
     }else{
         res.status(404).json({ error: '會員不存在' })
     }    
