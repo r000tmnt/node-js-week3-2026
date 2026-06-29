@@ -26,7 +26,7 @@ const router = express.Router();
 router.post('/', (req, res) => {
     const form = formidable({ 
         uploadDir: process.env.UPLOAD_DIR, 
-        maxFileSize: Number(setting.MAX_FILE_SIZE_MB) * 1024 * 1024,
+        maxFileSize: Number(process.MAX_FILE_SIZE_MB) * 1024 * 1024,
         keepExtensions: true
     })
 
@@ -36,11 +36,11 @@ router.post('/', (req, res) => {
     })
 
     form.parse(req, (err, fields, files) => {
-        // console.log('files', files)
+        console.log('files', files)
         if(err){
-        console.log('err', err)
-        res.status(400).json({ "success": false, "error": err })  
-        return
+            console.log('err', err)
+            res.status(400).json({ "success": false, "error": err })  
+            return
         }
 
         if(files.file && Array.isArray(files.file)){
@@ -52,7 +52,7 @@ router.post('/', (req, res) => {
                 savedPath: file.filepath 
             })
         }else{
-        res.status(400).json({ error: 'No file uploaded' })
+            res.status(400).json({ error: 'No file uploaded' })
         } 
     })
  });
