@@ -36,15 +36,15 @@ router.post('/', (req, res) => {
     })
 
     form.parse(req, (err, fields, files) => {
-        console.log('files', files)
+        // console.log('files', files)
         if(err){
             console.log('err', err)
             res.status(400).json({ "success": false, "error": err })  
             return
         }
 
-        if(files.file && Array.isArray(files.file)){
-            const file = files.file[0]
+        if(files.image && Array.isArray(files.image)){
+            const file = files.image[0]
 
             res.status(200).json({ 
                 filename: file.originalFilename, 
