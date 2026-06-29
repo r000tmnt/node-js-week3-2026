@@ -106,7 +106,7 @@ router.get('/:id', (req, res) => {
 // - 範例：POST /members body { name: '阿文', level: 'VIP' } → 201 { id: 5, name: '阿文', level: 'VIP' }
 /* 作答區  */
 router.post('/', (req, res) => { 
-    if(validateBody(req.body)){
+    if(validateBody(req.body).valid){
         const { name, level } = req.body
         members.push({
             id: nextId,
@@ -134,7 +134,7 @@ router.post('/', (req, res) => {
 // - 範例：PUT /members/1 body { level: 'normal' } → 200 { id: 1, name: '小華', level: 'normal' }（name 被保留）
 /* 作答區 */
 router.put('/:id', (req, res) => { 
-    if(validateBody(req.body)){
+    if(validateBody(req.body).valid){
         const { id } = req.params
         const target = members.findIndex(member => member.id === Number(id))
         
@@ -161,7 +161,7 @@ router.put('/:id', (req, res) => {
 // - 提示：members.findIndex 找索引，-1 回應 404；找到索引則 splice 移除，再設定 status 204 並以 .end() 結束回應（204 不帶 body）
 /* 作答區 */
 router.delete('/:id', (req, res) => { 
-    if(validateBody(req.body)){
+    if(validateBody(req.body).valid){
         const { id } = req.params
         const target = members.findIndex(member => member.id === Number(id))
         
