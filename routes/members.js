@@ -163,11 +163,17 @@ router.put('/:id', (req, res) => {
 // - 提示：members.findIndex 找索引，-1 回應 404；找到索引則 splice 移除，再設定 status 204 並以 .end() 結束回應（204 不帶 body）
 /* 作答區 */
 router.delete('/:id', (req, res) => { 
-    if(validateBody(req.body).valid){
+    const { id } = req.params
+    const target = members.findIndex(member => member.id === Number(id))
     
+    if(target >= 0){
+    
+        members.splice(target, 1)
+
+        res.status(204).end()
     }else{
         res.status(404).json({ error: '會員不存在' })
-    }    
+    }       
  });
 
 
