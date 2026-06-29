@@ -85,7 +85,7 @@ router.get('/', (req, res) => {
 /* 作答區 */
 router.get('/:id', (req, res) => { 
     const { id } = req.params
-    const result = members.find(member => member.id === id)
+    const result = members.find(member => member.id === Number(id))
     
     if(result !== undefined){
         res.status(200).json(result)
@@ -132,16 +132,51 @@ router.post('/', (req, res) => {
 // - 輸出：200 + merge 後的會員，或 404 + { error: '會員不存在' }（找不到時）
 // - 提示：members.findIndex 找索引，-1 回應 404；找到索引則使用 spread 合併 members[idx] 與 req.body（req.body 需注意順序來覆蓋舊欄位），最後將結果存回 members[idx]
 // - 範例：PUT /members/1 body { level: 'normal' } → 200 { id: 1, name: '小華', level: 'normal' }（name 被保留）
-/* 作答區
-router.METHOD('PATH', (req, res) => { ... });
-*/
+/* 作答區 */
+router.put('/:id', (req, res) => { 
+    if(validateBody(req.body)){
+        const { id } = req.params
+        const target = members.findIndex(member => member.id === Number(id))
+        
+        if(target >= 0){
+        
+            members[target] = {
+                ...members[target],
+                ...req.body
+            }
+
+            res.status(200).json(members[target])
+        }else{
+            res.status(404).json({ error: '會員不存在' })
+        }        
+    }else{
+        res.status(404).json({ error: '會員不存在' })
+    }
+ });
+
 
 // DELETE /:id
 // - 輸入：req.params.id（string，需 Number() 轉換）
 // - 輸出：204（無 body），或 404 + { error: '會員不存在' }（找不到時）
 // - 提示：members.findIndex 找索引，-1 回應 404；找到索引則 splice 移除，再設定 status 204 並以 .end() 結束回應（204 不帶 body）
-/* 作答區
-router.METHOD('PATH', (req, res) => { ... });
-*/
+/* 作答區 */
+router.delete('/:id', (req, res) => { 
+    if(validateBody(req.body)){
+        const { id } = req.params
+        const target = members.findIndex(member => member.id === Number(id))
+        
+        if(target >= 0){
+        
+            members.splice(target, 1)
+
+            res.status(204).end()
+        }else{
+            res.status(404).json({ error: '會員不存在' })
+        }        
+    }else{
+        res.status(404).json({ error: '會員不存在' })
+    }    
+ });
+
 
 module.exports = router;
