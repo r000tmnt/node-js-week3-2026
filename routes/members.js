@@ -9,32 +9,54 @@ const initialMembers = require('../fixtures/members.json');
 // ───────────────────────────────────────────────────────────
 
 // 1. 複製 initialMembers，不直接改外部陣列
-/* 作答區
-const members = ...;
-*/
+/* 作答區 */
+const members = [];
+
 
 // 2. 下一個新增會員要使用的 id
-/* 作答區
-let nextId = ...;
-*/
+/* 作答區 */
+let nextId = 1;
+
 
 // 3. 兩個內部 helper 函式
 
 // 函式一：filterByQuery(list, query)：
 // - 依據 query.level 篩選，沒帶就回全部
 // - 任務二的 GET / 會使用到這個函式
-/* 作答區
-function filterByQuery(list, query) { ... }
-*/
+/* 作答區 */
+function filterByQuery(list, query) {
+    if(query.level){
+        return list.filter(item => item.level === query.level)
+    }else{
+        return list
+    }
+ }
+
 
 // 函式二：validateBody(body)
 // - 驗證 body 有沒有 name、level 欄位，要擋 null / undefined / {}
 // - 驗證通過 → { valid: true }
 // - 驗證失敗 → { valid: false, error: '缺 name 或 level' }
 // - 任務三的 POST / 會使用到這個函式
-/* 作答區
-function validateBody(body) { ... }
-*/
+/* 作答區 */
+function validateBody(body) {
+    if(body.name && body.level){
+        const { name, level } = body
+
+        if(!name || name === undefined){
+            return { valid: false, error: '缺 name' }
+        }
+
+        if(!level || level === undefined){
+            return { valid: false, error: '缺 level' }
+        }
+        
+        return { valid: true }
+    }else{
+        return { valid: false, error: '缺 name 或 level' }
+    }
+ }
+
 
 const router = express.Router();
 // 此 router 掛在 app.js 的 '/members'，以下路由皆帶此前綴。舉例來說：
