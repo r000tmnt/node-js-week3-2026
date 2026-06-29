@@ -71,17 +71,29 @@ const router = express.Router();
 // - 輸入：req.query.level 可帶 'VIP' | 'normal'（選填）
 // - 輸出：200 + [{ id, name, level }, ...]
 // - 提示：filterByQuery(members, req.query)
-/* 作答區
-router.METHOD('PATH', (req, res) => { ... });
-*/
+/* 作答區 */
+router.get('/', (req, res) => { 
+    const result = filterByQuery(members, req.query)
+    res.status(200).json(result)
+ });
+
 
 // GET /:id
 // - 輸入：req.params.id（string，需使用 Number() 轉換）
 // - 輸出：200 + { id, name, level }，或 404 + { error: '會員不存在' }（找不到時）
 // - 提示：members.find，找不到時結果是 undefined
-/* 作答區
-router.METHOD('PATH', (req, res) => { ... });
-*/
+/* 作答區 */
+router.get('/:id', (req, res) => { 
+    const { id } = req.params
+    const result = members.find(member => member.id === id)
+    
+    if(result !== undefined){
+        res.status(200).json(result)
+    }else{
+        res.status(404).json({ error: '會員不存在' })
+    }
+ });
+
 
 // ───────────────────────────────────────────────────────────
 // TODO 任務三：POST /
